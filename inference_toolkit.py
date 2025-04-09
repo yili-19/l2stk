@@ -5,6 +5,7 @@ import sys
 import os
 from models.custom_model import CustomModel
 
+
 class InferenceToolkit:
     def __init__(self, model_config, strategy_config=None):
         """
@@ -28,13 +29,14 @@ class InferenceToolkit:
             # 如果是自定义模型，允许传入自定义的推理方法
             if model_type == 'custom':
                 infer_method = model_config.get('infer_method')  # 自定义的推理方法
-                model = CustomModel(infer_method)
+                api_key = model_config.get('api_key')
+                model_name = model_config.get('model_name')
+                model = CustomModel(api_key,model_name)
             else:
-                # 动态导入预设模型模块s
-                # model_module_path = f'{model_module}.{model_type}_model' 
-                # model_class = getattr(importlib.import_module(model_module_path))
-                # model = model_class(**model_config.get('params', {}))
-                model = CustomModel(infer_method)
+                # 动态导入预设模型模块
+                model_module_path = f'{model_module}.{model_type}_model' # import models.pth
+                model_class = getattr(importlib.import_module(model_module_path))
+                model = model_class(**model_config.get('params', {}))
 
             return model
         except (ModuleNotFoundError, AttributeError) as e:
@@ -44,11 +46,11 @@ class InferenceToolkit:
     def _load_strategy(self, strategy_config):
         """根据策略配置加载策略"""
         strategy_type = strategy_config.get('strategy', 'default')
-        strategy_module = strategy_config.get('module', 'strategies')
+        strategy_module = strategy_config.get('module', 'strategy')
 
         try:
             strategy_class_name = f'{strategy_type.capitalize()}Strategy'
-            strategy_module_path = f'{strategy_module}.{strategy_type}_strategy'
+            strategy_module_path = f'{strategy_module}.{strategy_type}_strategy' # import strategy.pth
             strategy_class = getattr(importlib.import_module(strategy_module_path), strategy_class_name)
             return strategy_class(**strategy_config.get(f'{strategy_type}_params', {}))
         except (ModuleNotFoundError, AttributeError) as e:
@@ -59,6 +61,4 @@ class InferenceToolkit:
         """根据配置的策略进行推理"""
         if self.strategy:
             input_data = self.strategy.apply(input_data, self.model)
-        
-        # 使用模型进行推理
         return self.model.infer(input_data)
