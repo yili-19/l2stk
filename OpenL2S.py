@@ -6,7 +6,7 @@ import os
 from models.custom_model import CustomModel
 
 
-class InferenceToolkit:
+class OpenL2S:
     def __init__(self, model_config, strategy_config=None):
         """
         初始化InferenceToolkit，传入模型配置和策略配置
@@ -52,12 +52,12 @@ class InferenceToolkit:
             strategy_class_name = f'{strategy_type.capitalize()}Strategy'
             strategy_module_path = f'{strategy_module}.{strategy_type}_strategy' # import strategy.pth
             strategy_class = getattr(importlib.import_module(strategy_module_path), strategy_class_name)
-            return strategy_class(**strategy_config.get(f'{strategy_type}_params', {}))
+            return strategy_class(**strategy_config.get('params', {}))
         except (ModuleNotFoundError, AttributeError) as e:
             print(f"Error: Could not load strategy '{strategy_class_name}' from module '{strategy_module_path}'. {e}")
             return None
     
-    def run_inference(self, input_data):
+    def run(self, input_data):
         """根据配置的策略进行推理"""
         if self.strategy:
             input_data = self.strategy.apply(input_data, self.model)
