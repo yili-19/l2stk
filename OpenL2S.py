@@ -62,3 +62,4 @@ class OpenL2S:
         if self.strategy:
             input_data = self.strategy.apply(input_data, self.model)
         return self.model.infer(input_data)
+    

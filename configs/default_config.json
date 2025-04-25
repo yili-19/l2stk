@@ -1,0 +1,57 @@
+{
+    "dataset": {
+        "name": "gsm8k",
+        "param": {
+            "name": "gsm8k",
+            "batch_size": 32
+        }
+    },
+    "processor": {
+        "strategy":"ConciseReasoning",
+        "name": "FewShotProcessor",
+        "param": {
+            "param1": "value1"
+        }
+    },
+    "model": {
+        "strategy":"ConciseReasoning",
+        "model_name":"llama2",
+        "name": "Concise",
+        "param": {
+            "layers": 3
+        }
+    },
+    "trainer": {
+        "strategy":"ConciseReasoning",
+        "name": "SftTrainer",
+        "param": {
+            "dataset": "gsm8k",
+            "model_path": "./models/llama2",
+            "model_name": "llama2",
+            "output_dir": "./outputs",
+            "type": "cot",
+            "data_path": "./data",
+            "percentage": 100,
+            "target_total": null,
+            
+            "batch_size": 16,
+            "grad_steps": 1,
+            "learning_rate": 1e-5,
+            "seed": 42,
+            
+            "num_train_epochs": 3.0,
+            "save_strategy": "epoch",
+            "save_steps": 1.0,
+            "logging_steps": 16,
+            "save_total_limit": 3,
+            "lr_scheduler_type": "cosine",
+            
+            "bf16": false,
+            "no_log": false,
+            
+            "max_new_tokens": 512,
+            "use_flash_attention": false,
+            "use_raw_output_dir": false
+        }
+    }
+}

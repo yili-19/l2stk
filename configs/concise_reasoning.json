@@ -1,0 +1,88 @@
+{
+    "dataset": {
+      "name": "gsm8k",
+      "config": {
+        "use_local": true,
+        "data_files":{
+          "train": "/home/liyi/code/l2stk/data/gsm8k/gsm8k_train.json",
+          "test": "/home/liyi/code/l2stk/data/gsm8k/gsm8k_test.json"
+        }
+      }
+    },
+    "processor": {
+      "strategy":"ConciseReasoning",
+      "name": "DefaultProcessor", 
+      "config": {
+        "save_path": "/home/liyi/code/l2stk/exp",
+        "prompt": "zero-shot",
+        "model_path": "/home/liyi/model/Llama-3.2-1B-Instruct",
+        "model_name": "Llama-3.2-1B-Instruct",
+        "dataset": "gsm8k",
+        "do_sample": true,
+        "batch_size": 32,
+        "num_diverse_path": 5,
+        "max_new_tokens": 512,
+        "use_vllm": false,
+        "few_shot_path": "/home/liyi/code/l2stk/exp/few_shot_example.json",
+        "prompt_system": "irpo",
+        "prompt_system_key": null,
+        "temperature": 0.7,
+        "top_k": 40,
+        "top_p": 0.95,
+        "accelerate": false,
+        "flash_attention": false,
+        "num_first_samples": null,
+        "num_random_samples": null
+      }
+    },
+    "model": {
+      "strategy":"ConciseReasoning",
+      "name": "DefaultModel",
+      "config": {
+        "model_path": "/home/liyi/model/Llama-3.2-1B-Instruct",
+        "model_name": "Llama-3.2-1B-Instruct",
+        "use_flash_attention": false
+      }
+    },
+    "trainer": {
+      "strategy":"ConciseReasoning",
+      "name": "IterativeTrainer",
+      "config": {
+          "dataset": "gsm8k",
+          "model_name": "Llama-3.2-1B-Instruct",
+          "model_path": "/home/liyi/model/Llama-3.2-1B-Instruct",
+          "output_dir": "/home/liyi/code/l2stk/exp",
+          "type": "shortest",
+          "data_path": "./data",
+          "percentage": 100,
+          "target_total": null,
+          "batch_size": 16,
+          "grad_steps": 1,
+          "learning_rate": 1e-5,
+          "seed": 42,
+          "num_train_epochs": 3.0,
+          "save_strategy": "epoch",
+          "save_steps": 1.0,
+          "logging_steps": 16,
+          "save_total_limit": 3,
+          "lr_scheduler_type": "cosine",
+          "bf16": false,
+          "no_log": false,
+          "max_new_tokens": 512,
+          "use_raw_output_dir": false,
+          "use_flash_attention": false,
+
+          "iteration_method": "shift",
+          "num_iterations": 3,
+          "start_step": 0,
+          "do_sample": true,
+          "temperature": 0.7,
+          "top_k": 40 ,
+          "top_p": 0.95,
+          "num_diverse_paths":  1,
+          "prompt_system": "irpo",
+          "accelerate": true,
+          "only_correct": true
+        }
+    }
+  }
