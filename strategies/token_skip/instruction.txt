@@ -1,0 +1,22 @@
+if you want to use TokenSkip for compression: you should first get the sft data for your training
+
+You can follow the below instrutions:
+1. python strategies/token_skip/evaluation.py --output-dir "strategies/token_skip/outputs/Qwen2.5-7B-Instruct/gsm8k/" \
+    --model-path "/your_model_path/Qwen2.5-7B-Instruct" --tokenizer-path ${MODEL_PATH} \
+    --model-size "7b" --model-type "qwen" --data-type "train"  \
+    --max_num_examples 100000000000000 --max_new_tokens 512 \
+    --eval_batch_size 32 --temperature 0.0 --seed 42 --benchmark "gsm8k"
+
+2. python strategies/token_skip/LLMLingua.py
+
+3. python strategies/token_skip/get_llamafactory_input.py
+
+4. git clone --depth 1 https://github.com/hiyouga/LLaMA-Factory.git
+   cd LLaMA-Factory
+   pip install -e ".[torch,metrics]"
+
+5. cd ..
+
+6. cp ./outputs/mydataset_compressed_gsm8k_llmlingua2_qwen_7B.json LLaMA-Factory/data/mydataset_compressed_gsm8k_llmlingua2_qwen_7B.json
+
+7. register it in data/dataset_info.json
