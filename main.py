@@ -44,4 +44,4 @@ if __name__ == "__main__":
     parser.add_argument("--model_name", type=str)
     parser.add_argument("--strategy", type=str, choices=['pruning', 'tale', 'cos'], help="Select strategy to apply.")
     args = parser.parse_args()
-    main(args) 
+    main(args)
